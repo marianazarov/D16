@@ -1,0 +1,39 @@
+{% extends 'flatpages/default.html' %}
+{% block content %}
+    <hr>
+    <h5>Заголовок: {{ ad.title }}</h5>
+    <h5>Дата публикации: {{ ad.dateCreation|date:'d M Y' }}</h5>
+    <h5>Автор: {{ ad.author }}</h5>
+    <td>
+    <h5>Категория: {{ ad.category }}</h5>
+        {% if user.is_authenticated %}
+           {% if user.id == ad.author.id %}
+            <p><em><a href="{% url 'ad_update' pk=ad.id %}">Редактировать</a></em></p>
+            <p><em><a href="{% url 'ad_delete' pk=ad.id %}">Удалить</a></em></p>
+           {% endif %}
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            {% if user.id != ad.author.id %}
+            <div style="text-align: center;"><h4><em><a href="{% url 'response' ad_id=ad.id %}">Оставить отклик!</a></em></h4></div>
+            {% endif %}
+        {% endif %}
+    </td>
+        {% if ad %}
+        <hr>
+        {% if ad.image %}
+            <img src="{{ ad.image.url }}">
+        {% endif %}
+         {% if object.upload %}
+            <video src="{{ ad.upload.url }}" controls></video>
+
+         {% endif %}
+        <table align="center">
+        <tr>
+        <td>{{ ad.text }}</td>
+        </tr>
+        </table>
+
+        {% endif %}
+        <hr>
+{% endblock content %}

@@ -1,0 +1,78 @@
+{% extends 'flatpages/default.html' %}
+
+
+{% block title %}
+Ads
+{% endblock title %}
+
+
+{% block content %}
+   <h1>Все объявления</h1>
+
+   <hr>
+   {% if ads %}
+       <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Заголовок</th>
+            <th scope="col">Дата публикации</th>
+            <th scope="col">Текст</th>
+            <th scope="col">Ссылка на статью</th>
+            <th scope="col">Редактировать</th>
+            <th scope="col">Удалить</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ad in ads %}
+        <tr>
+            <th scope="row">{{ ad.title }}</th>
+            <td>{{ ad.dateCreation }}</td>
+            <td>{{ ad.text | truncatechars:9 }}</td>
+            <td><a class="btn btn-primary btn-sm" href="/ads/{{ ad.pk }}">Читать</a></td>
+
+
+                    {# А здесь доступ для каждой ссылки теперь будем проверять отдельно #}
+                    {% if perms.board.change_ad %}
+                      {% if user.is_authenticated %}
+                        {% if user.id == ad.author.id %}
+                   <td> <a class="btn btn-primary btn-sm" href="{% url 'ad_update' pk=ad.id %}">Изменить</a></td>
+                    {% endif %}
+             {% endif %}
+              {% endif %}
+                    {% if perms.board.delete_ad %}
+                       {% if user.is_authenticated %}
+                          {% if user.id == ad.author.id %}
+                    <td> <a class="btn btn-primary btn-sm" href="{% url 'ad_delete' pk=ad.id %}">Удалить</a></td>
+                    {% endif %}
+            {% endif %}
+             {% endif %}
+
+        {% endfor %}
+        </tbody>
+    </table>
+   {% else %}
+       <h2>Объявлений нет!</h2>
+   {% endif %}
+ {# Добавляем пагинацию на страницу #}
+
+   {# Информация о предыдущих страницах #}
+   {% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+{% endblock content %}

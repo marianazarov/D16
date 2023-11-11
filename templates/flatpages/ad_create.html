@@ -1,0 +1,15 @@
+{% extends 'flatpages/default.html' %}
+{% load static %}
+{% block content %}
+    <h3 style="text-align: center;"><span style="text-decoration: underline;"><em>Здесь Вы можете создать своё объявление!</em></span></h3>
+        <hr>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if img_obj %}
+        <img src= alt="connect" style="max-height:300px">
+        <video src= controls></video>
+        {% endif %}
+        {{ form.as_p }}
+        <input type="submit" value="Save" />
+    </form>
+{% endblock content %}

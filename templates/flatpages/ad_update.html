@@ -1,0 +1,18 @@
+{% extends 'flatpages/default.html' %}
+{% block content %}
+    <h3 style="text-align: center;"><span style="text-decoration: underline;"><em>Здесь Вы можете отредактировать своё объявление!</em></span></h3>
+    <hr>
+    {% if ad.image %}
+        <td><img src="{{ ad.image.url }}"></td>
+    {% endif %}
+    {% if object.upload %}
+            <video src="{{ ad.upload.url }}" controls></video>
+    {% endif %}
+
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>{{ ad }}</p>
+        {{ form.as_p }}
+        <input type="submit" value="Update" />
+    </form>
+{% endblock content %}

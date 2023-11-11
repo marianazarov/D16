@@ -1,0 +1,16 @@
+{% extends 'flatpages/default.html' %}
+{% block content %}
+    <h3 style="text-align: center;"><span style="text-decoration: underline;"><em>Хотите удалить своё объявление?</em></span></h3>
+
+    <hr>
+    {% if article.image %}
+        <td><img src="{{ ad.image.url }}"></td>
+        <video src= controls></video>
+    {% endif %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>{{ ad }}</p>
+        {{ form.as_p }}
+        <input type="submit" value="Delete" />
+    </form>
+{% endblock content %}
